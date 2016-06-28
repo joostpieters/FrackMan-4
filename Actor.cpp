@@ -155,7 +155,6 @@ Protester::Protester(StudentWorld* ip, int imageID, int hp, int points)
 	m_restingTicks = 3 - ip->getLevel() / 4 > 0 ? 3 - ip->getLevel() / 4 : 0;
 	m_shoutCooldown = 0;
 	m_turnCooldown = 0;
-	// TODO - new search algorithm
 	m_distanceFromTarget = 0;
 	setVisible(true);
 }
@@ -163,7 +162,7 @@ Protester::Protester(StudentWorld* ip, int imageID, int hp, int points)
 Protester::~Protester()
 {
 	getWorld()->decrementProtesters();
-	getWorld()->decrementNumLeavers(); // TODO - for new search algorithm
+	getWorld()->decrementNumLeavers();
 }
 
 void Protester::setRest(int k)
@@ -201,9 +200,8 @@ void Protester::doSomething()
 	{
 		if (getX() == 60 && getY() == 60)
 			setDead();
-		else // TODO - new search algorithm
+		else
 		{
-			//getWorld()->moveLeavingProtesterTowardsExit(this);
 			getWorld()->updateExitHeatMap();
 			Direction dir = getWorld()->findBestMoveToExit(this);
 			if (dir != none)
@@ -222,10 +220,8 @@ void Protester::doSomething()
 		{
 			getWorld()->shout(this);
 			m_shoutCooldown = 15;
-			// !!! LINES BELOW IS NOT TO SPEC, BUT MATCHES SAMPLE GAME !!!
 			m_shoutCooldown = 0;
 			setRest(15 * (3 - getWorld()->getLevel() / 4 > 0 ? 3 - getWorld()->getLevel() / 4 : 0));
-			// !!! LINES ABOVE IS NOT TO SPEC, BUT MATCHES SAMPLE GAME !!!
 			return;
 		}
 	}
@@ -308,9 +304,9 @@ void Protester::annoyAux(Actor* annoyer)
 	else
 	{
 		setLeaving();
-		getWorld()->incrementNumLeavers();	// TODO - for new search algorithm
+		getWorld()->incrementNumLeavers();
 		if (canTrackPlayer())
-			getWorld()->decrementNumTrackers();	// TODO - for new search algo
+			getWorld()->decrementNumTrackers();
 		getWorld()->playSound(SOUND_PROTESTER_GIVE_UP);
 		setRest(0);
 		if (annoyer->blocksPlayer())	// boulder
@@ -338,7 +334,6 @@ void HardcoreProtester::addGold()
 
 bool HardcoreProtester::doSomethingAux()
 {
-	//return getWorld()->moveHardcoreTowardsPlayer(this, M);	// TODO - remove this
 	getWorld()->updatePlayerHeatMap();
 	int M = 16 + getWorld()->getLevel() * 2;
 	if (getDistanceFromTarget() > M)
@@ -356,7 +351,6 @@ bool HardcoreProtester::doSomethingAux()
 Boulder::~Boulder()
 {
 	getWorld()->setExitHeatMap(true);
-	//getWorld()->setPlayerHeatMap(true);
 }
 
 void Boulder::doSomething()
@@ -382,8 +376,7 @@ void Boulder::doSomething()
 	else // falling
 	{
 		getWorld()->annoyAllNearbyAgents(this, 3, 100);
-		getWorld()->setExitHeatMap(true);	// TODO - new search algorithm
-		//getWorld()->setPlayerHeatMap(true);
+		getWorld()->setExitHeatMap(true);
 		if (!move())
 			setDead();
 	}
