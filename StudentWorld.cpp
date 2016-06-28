@@ -197,7 +197,7 @@ void StudentWorld::dirToCoord(Actor* p, int& x, int& y, int distance) const
 	case GraphObject::right:
 		x = distance;	y = 0;	break;
 	case GraphObject::none:
-		x = 0;	y = 0;			break;	// !!! this isn't really needed
+		x = 0;	y = 0;		break;
 	}
 	x += p->getX();
 	y += p->getY();
@@ -248,7 +248,6 @@ bool StudentWorld::digIfNeeded(Actor* p)
 				m_field[x][y] = nullptr;
 				dug = true;
 				m_updateExitHeatMap = true;
-				//m_updatePlayerHeatMap = true;
 			}
 		}
 	}
@@ -434,63 +433,6 @@ bool StudentWorld::unblockedLineOfSightToPlayer(Actor* p) const
 		return false;
 }
 
-/*
-bool StudentWorld::moveHardcoreTowardsPlayer(Actor* target, int distance)
-{
-	bool visited[VIEW_WIDTH - SPRITE_WIDTH + 1][VIEW_HEIGHT - SPRITE_HEIGHT + 1] = { false };
-	queue<Coord> q;
-	q.push(Coord(m_player->getX(), m_player->getY()));
-	visited[m_player->getX()][m_player->getY()] = true;
-	int distanceTraveled = 0, paths = 1, curPath = 1;
-	while (!q.empty() && distanceTraveled <= distance)
-	{
-		int x = q.front().x(), y = q.front().y(), numPushed = 0;
-		q.pop();
-		// UP
-		if (!moveBlocksProtester(x, y + 1) && !visited[x][y + 1])
-		{
-			q.push(Coord(x, y + 1));	numPushed++;
-			visited[x][y + 1] = true;
-			if (moveTargetAt(target, x, y + 1, GraphObject::down))
-				return true;
-		}
-		// DOWN
-		if (!moveBlocksProtester(x, y - 1) && !visited[x][y - 1])
-		{
-			q.push(Coord(x, y - 1));	numPushed++;
-			visited[x][y - 1] = true;
-			if (moveTargetAt(target, x, y - 1, GraphObject::up))
-				return true;
-		}
-		// LEFT
-		if (!moveBlocksProtester(x - 1, y) && !visited[x - 1][y])
-		{
-			q.push(Coord(x - 1, y));	numPushed++;
-			visited[x - 1][y] = true;
-			if (moveTargetAt(target, x - 1, y, GraphObject::right))
-				return true;
-		}
-		// RIGHT
-		if (!moveBlocksProtester(x + 1, y) && !visited[x + 1][y])
-		{
-			q.push(Coord(x + 1, y));	numPushed++;
-			visited[x + 1][y] = true;
-			if (moveTargetAt(target, x + 1, y, GraphObject::left))
-				return true;
-		}
-
-		paths += numPushed - paths;
-		if (curPath == 1)
-		{
-			distanceTraveled++;
-			curPath = paths;
-		}
-		else
-			curPath--;
-	}
-	return false;
-}*/
-
 void StudentWorld::updateExitHeatMap()
 {
 	if (!m_updateExitHeatMap)
@@ -645,49 +587,6 @@ GraphObject::Direction StudentWorld::findBestMoveToPlayer(Protester* p) const
 	return GraphObject::none;
 }
 
-/*
-void StudentWorld::moveLeavingProtesterTowardsExit(Actor* p)
-{
-	bool found = false;
-	bool visited[VIEW_WIDTH - SPRITE_WIDTH + 1][VIEW_HEIGHT - SPRITE_HEIGHT + 1] = { false };
-	queue<Coord> q;
-	q.push(Coord(60, 60));
-	visited[60][60] = true;
-	while (!q.empty() && !found)
-	{
-		int x = q.front().x(), y = q.front().y();
-		q.pop();
-		// UP
-		if (!moveBlocksProtester(x, y + 1) && !visited[x][y + 1])
-		{
-			q.push(Coord(x, y + 1));
-			visited[x][y + 1] = true;
-			found = moveTargetAt(p, x, y + 1, GraphObject::down);
-		}
-		// DOWN
-		if (!moveBlocksProtester(x, y - 1) && !visited[x][y - 1])
-		{
-			q.push(Coord(x, y - 1));
-			visited[x][y - 1] = true;
-			found = moveTargetAt(p, x, y - 1, GraphObject::up);
-		}
-		// LEFT
-		if (!moveBlocksProtester(x - 1, y) && !visited[x - 1][y])
-		{
-			q.push(Coord(x - 1, y));
-			visited[x - 1][y] = true;
-			found = moveTargetAt(p, x - 1, y, GraphObject::right);
-		}
-		// RIGHT
-		if (!moveBlocksProtester(x + 1, y) && !visited[x + 1][y])
-		{
-			q.push(Coord(x + 1, y));
-			visited[x + 1][y] = true;
-			found = moveTargetAt(p, x + 1, y, GraphObject::left);
-		}
-	}
-}*/
-
 bool StudentWorld::atIntersection(Actor* p) const
 {
 	GraphObject::Direction dir = p->getDirection();
@@ -796,7 +695,7 @@ void StudentWorld::setDisplayText()
 	int oil = m_numOil <= 99 ? m_numOil : 99;
 	
 	char buffer[86];	//[5+6+2      + 5+2+2  + 7+1+2   + 6+4+2     + 5+2+2  + 5+2+2  + 7+2+2    + 10+2      +1]
-						// Scr:	321000  Lvl: _2  Lives: 3  Hlth: _80%  Wtr: _2  Gld: _3  Sonar: _1  Oil Left: _2
+				// Scr:	321000  Lvl: _2  Lives: 3  Hlth: _80%  Wtr: _2  Gld: _3  Sonar: _1  Oil Left: _2
 	sprintf(buffer, "Scr: %06d  Lvl: %2d  Lives: %1d  Hlth: %3d%%  Wtr: %2d  Gld: %2d  Sonar: %2d  Oil Left: %2d",
 		score, level, lives, health, water, gold, sonar, oil);
 	string s = buffer;
@@ -867,22 +766,6 @@ bool StudentWorld::playerCompletedLevel() const
 {
 	return m_numOil == 0;
 }
-
-/*
-bool StudentWorld::moveTargetAt(Actor* target, int x, int y, GraphObject::Direction dir)
-{
-	for (unsigned int i = 1; i < m_actors.size(); i++)	// start at 1 to avoid player
-	{
-		if (m_actors[i] == target && m_actors[i]->getX() == x && m_actors[i]->getY() == y)
-		{
-			Protester* p = dynamic_cast<Protester*>(m_actors[i]);
-			p->setDirection(dir);
-			p->move();
-			return true;
-		}
-	}
-	return false;
-}*/
 
 void StudentWorld::initializeExitHeatMap()
 {
