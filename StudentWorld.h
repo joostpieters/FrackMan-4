@@ -10,7 +10,7 @@
 class Actor;
 class Dirt;
 class FrackMan;
-class Protester;	// TODO - new search algorithm
+class Protester;
 
 class StudentWorld : public GameWorld
 {
@@ -42,11 +42,9 @@ public:
 	bool actorFacingPlayer(Actor* p) const;
 	void changeDirToPlayer(Actor* p);
 	bool unblockedLineOfSightToPlayer(Actor* p) const;
-	//bool moveHardcoreTowardsPlayer(Actor* target, int distance); // TODO - replace
-	//void moveLeavingProtesterTowardsExit(Actor* p); // TODO - replace
 	bool atIntersection(Actor* p) const;
 	void decrementProtesters();
-	// !!! new search algorithm!
+
 	void updateExitHeatMap();
 	void updatePlayerHeatMap();
 	void setExitHeatMap(bool k) {m_updateExitHeatMap = k;}
@@ -58,7 +56,7 @@ public:
 	void decrementNumTrackers() {if (m_numTrackers > 0) m_numTrackers--;}
 
 private:
-	void addActor(Actor* p);	// !!! not really needed
+	void addActor(Actor* p);
 	void fillFieldWithDirt();
 	void createMineShaft();
 	void distributeObjects(int num, Object type);
@@ -71,8 +69,7 @@ private:
 	bool square4x4HasBoulder(int x, int y, Actor* p = nullptr) const;
 	bool withinRadius(int x1, int y1, int x2, int y2, int radius) const;
 	bool playerCompletedLevel() const;
-	//bool moveTargetAt(Actor* target, int x, int y, GraphObject::Direction dir); // TODO - replace
-	// !!! new search algorithm!
+
 	void initializeExitHeatMap();
 	void initializePlayerHeatMap();
 	int numLeaversSet(int x, int y, int distance);
@@ -90,18 +87,17 @@ private:
 		int m_y;
 	};
 	std::vector<Actor*>	m_actors;
-	Dirt*				m_field[VIEW_WIDTH][VIEW_HEIGHT];
-	FrackMan*			m_player;
-	int					m_numOil;
-	int					m_numProtesters;
-	int					m_protesterCooldown;
-	// !!! new maze search algorithm
-	int					m_numLeavers;
-	int					m_numTrackers;
-	bool				m_updateExitHeatMap;
-	bool				m_updatePlayerHeatMap;
-	int					m_exitHeatMap[VIEW_WIDTH - SPRITE_WIDTH + 1][VIEW_HEIGHT - SPRITE_HEIGHT + 1];
-	int					m_playerHeatMap[VIEW_WIDTH - SPRITE_WIDTH + 1][VIEW_HEIGHT - SPRITE_HEIGHT + 1];
+	Dirt*			m_field[VIEW_WIDTH][VIEW_HEIGHT];
+	FrackMan*		m_player;
+	int			m_numOil;
+	int			m_numProtesters;
+	int			m_protesterCooldown;
+	int			m_numLeavers;
+	int			m_numTrackers;
+	bool			m_updateExitHeatMap;
+	bool			m_updatePlayerHeatMap;
+	int			m_exitHeatMap[VIEW_WIDTH - SPRITE_WIDTH + 1][VIEW_HEIGHT - SPRITE_HEIGHT + 1];
+	int			m_playerHeatMap[VIEW_WIDTH - SPRITE_WIDTH + 1][VIEW_HEIGHT - SPRITE_HEIGHT + 1];
 };
 
 #endif // STUDENTWORLD_H_
