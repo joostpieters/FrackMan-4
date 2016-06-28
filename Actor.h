@@ -112,7 +112,6 @@ public:
 	void setLeaving() { m_leaving = true; }
 	virtual void annoy(unsigned int amt, Actor* annoyer);
 	virtual void doSomething();
-	// TODO - new search algorithm
 	void setDistanceFromTarget(int distance);
 	int getDistanceFromTarget() const;
 private:
@@ -127,7 +126,6 @@ private:
 	int m_restingTicks;
 	int m_shoutCooldown;
 	int m_turnCooldown;
-	// TODO - new search algorithm
 	int m_distanceFromTarget;
 };
 
